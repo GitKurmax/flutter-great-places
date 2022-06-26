@@ -7,6 +7,8 @@ if (localPropertiesFile.exists()) {
 }
 
 def flutterRoot = localProperties.getProperty('flutter.sdk')
+def googleApiKey = localProperties.getProperty('segment.googleApiKey')
+
 if (flutterRoot == null) {
     throw new GradleException("Flutter SDK not found. Define location with flutter.sdk in the local.properties file.")
 }
@@ -47,10 +49,12 @@ android {
         applicationId "com.example.great_places"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-build-configuration.
-        minSdkVersion flutter.minSdkVersion
+        minSdkVersion 20
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        manifestPlaceholders = [googleApiKey: googleApiKey]
+        manifestPlaceholders += [applicationName: "android.app.Application"]
     }
 
     buildTypes {

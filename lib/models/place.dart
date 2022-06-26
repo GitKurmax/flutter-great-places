@@ -6,14 +6,14 @@ class PlaceLocation {
   final double longtitude;
   final String? address;
 
-  PlaceLocation(
+  const PlaceLocation(
       {required this.latitude, required this.longtitude, this.address});
 }
 
 class Place {
   final String id;
   final String title;
-  final PlaceLocation? location;
+  final PlaceLocation location;
   final File image;
 
   Place({

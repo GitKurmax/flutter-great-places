@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:great_places/providers/great_places.dart';
 import 'package:great_places/screens/add_place_screen.dart';
+import 'package:great_places/screens/place_detail_screen.dart';
 import 'package:provider/provider.dart';
 
 class PlacesListScreen extends StatelessWidget {
@@ -22,28 +23,35 @@ class PlacesListScreen extends StatelessWidget {
       body: FutureBuilder(
         future: Provider.of<GreatPlaces>(context, listen: false)
             .fetchAndSetPlaces(),
-        builder: (ctx, snapshot) =>
-            snapshot.connectionState == ConnectionState.waiting
-                ? Center(child: CircularProgressIndicator())
-                : Consumer<GreatPlaces>(
-                    child: const Center(
-                        child: Text('Got no places yet, start adding some!')),
-                    builder: (ctx, greatPlaces, ch) {
-                      return greatPlaces.items.isEmpty
-                        ? ch!
-                        : ListView.builder(
-                            itemCount: greatPlaces.items.length,
-                            itemBuilder: (ctx, i) => ListTile(
-                              leading: CircleAvatar(
-                                backgroundImage:
-                                    FileImage(greatPlaces.items[i].image),
-                              ),
-                              title: Text(
-                                greatPlaces.items[i].title,
-                              ),
-                              onTap: () {},
+        builder: (ctx, snapshot) => snapshot.connectionState ==
+                ConnectionState.waiting
+            ? Center(child: CircularProgressIndicator())
+            : Consumer<GreatPlaces>(
+                child: const Center(
+                    child: Text('Got no places yet, start adding some!')),
+                builder: (ctx, greatPlaces, ch) {
+                  return greatPlaces.items.isEmpty
+                      ? ch!
+                      : ListView.builder(
+                          itemCount: greatPlaces.items.length,
+                          itemBuilder: (ctx, i) => ListTile(
+                            leading: CircleAvatar(
+                              backgroundImage:
+                                  FileImage(greatPlaces.items[i].image),
                             ),
-                          );}),
+                            title: Text(
+                              greatPlaces.items[i].title,
+                            ),
+                            subtitle:
+                                Text(greatPlaces.items[i].location.address!),
+                            onTap: () {
+                              Navigator.of(context).pushNamed(
+                                  PlaceDetailScreen.routeName,
+                                  arguments: greatPlaces.items[i].id);
+                            },
+                          ),
+                        );
+                }),
       ),
     );
   }
